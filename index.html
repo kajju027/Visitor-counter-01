@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌍 Live Counter with Likes</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #000428, #004e92);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+  }
+  h1 { font-size: 2rem; margin-bottom: 10px; }
+  #liveCount { font-size: 3.5rem; color: #00FFAA; text-shadow: 0 0 20px #00ffaa; }
+  #totalCount { font-size: 1.4rem; margin-top: 10px; color: #FFD700; }
+  #likeBtn {
+    margin-top: 20px;
+    background: #FF0066;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #ff0066;
+    transition: all 0.2s;
+  }
+  #likeBtn:hover { transform: scale(1.1); }
+  #likeMessage { margin-top: 10px; font-size: 1rem; color: #ffccff; }
+  footer { position: absolute; bottom: 20px; font-size: 14px; opacity: 0.7; }
+</style>
+</head>
+<body>
+  <h1>🌎 Live Visitors Right Now</h1>
+  <div id="liveCount">Loading...</div>
+  <div id="totalCount">Total Visits: Loading...</div>
+
+  <button id="likeBtn">❤️ Like</button>
+  <div id="likeMessage"></div>
+
+  <footer>Created by SAYAN | All Rights Reserved</footer>
+
+<script>
+async function updateCounts() {
+  try {
+    const response = await fetch("counter.php");
+    const data = await response.json();
+    document.getElementById("liveCount").innerText = data.live;
+    document.getElementById("totalCount").innerText = "Total Visits: " + data.total;
+  } catch (e) {
+    document.getElementById("liveCount").innerText = "Error!";
+  }
+}
+updateCounts();
+setInterval(updateCounts, 3000);
+
+// Like system
+document.getElementById("likeBtn").addEventListener("click", async () => {
+  try {
+    const res = await fetch("like.php");
+    const data = await res.text();
+    document.getElementById("likeMessage").innerText = data;
+  } catch {
+    document.getElementById("likeMessage").innerText = "Error!";
+  }
+});
+</script>
+</body>
+</html>
